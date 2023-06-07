@@ -1,38 +1,18 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# MOMOVIVIE
+## 프로젝트 목적
+- 명작 반열에 든 영화들을 랭킹순으로 확인할 수 있으면서, 영화에 대한 타인들의 평가도 같이 볼 수 있는 사이트를 구축합니다.
+- 이 사이트를 통해 보고싶은 영화들을 빠르게 캐치해낼 수 있고, 어떤 영화를 볼지 결정할 시간을 단축시켜 줍니다.
+- 심심풀이 + 커뮤니티 용도로도 활용할 수 있습니다.
 
-## Getting Started
+## 이 프로젝트를 통해 달성하고자 하는 개인적 목적
+- Next.js의 입문작으로써, 이 프로젝트를 통해 프레임워크를 숙달합니다. (SSR을 경험하는데 의의를 둡니다.)
+- 파이어베이스+파이어스토어를 도입하여 프로젝트에 알맞게 컬렉션, 도큐먼트를 구성해봄으로써 지식의 범주를 넓힙니다.
+- 빠른 개발 후, 코드 리뷰를 통해 스스로 부족한 점을 파악하고 개선해나갑니다.
+- 코드 리뷰시에는 웹 접근성과 유지보수성을 중점적으로 개선해 나갈 생각입니다.
 
-First, run the development server:
+## 개발 당시 발생한 에러
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 개발하며 느낀 의문점
+- 서버 사이드 렌더링은 서버측에서 렌더링을 한 후, 클라이언트에게 전달해주는 것이다. 즉 서버에 일정량의 부하를 가할텐데, SSR을 사용할 경우 CSR보다 서버 비용이 얼마나 청구될까?
+- 
