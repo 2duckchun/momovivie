@@ -14,7 +14,7 @@ export default function Home({ results }: PopularMovieList) {
         {results?.map((movie) => (
           <div className="movie" key={movie.id}>
             <img src={`${MovieApiUrl.IMG}${movie.poster_path}`} />
-            <h4>{movie.original_title}</h4>
+            <h4>{movie.title}</h4>
             <div className="movie_info">
               <span>평점:{movie.vote_average}</span>
               <span className="release_date">개봉일:{movie.release_date}</span>
