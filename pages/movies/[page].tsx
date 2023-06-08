@@ -1,26 +1,32 @@
 import Pagination from "@/components/Pagination";
 import Seo from "@/components/Seo";
-import { MovieApiUrl } from "@/types/movies";
-import type { PopularMovieList, MovieIndex } from "@/types/movies";
+import { GetMovieListResult, MovieApiUrl } from "@/types/movies";
+import type { MovieIndex } from "@/types/movies";
 import { useRouter } from "next/router";
+import getMovieList from "@/apis/getMovieList";
 
-export default function Home({ results }: PopularMovieList) {
+export default function Home({ movieList, isSuccess }: GetMovieListResult) {
   const router = useRouter();
-
+  const moveToDetail = (id: number) => {
+    router.push(`/movies/detail/${id}`);
+  };
   return (
     <>
       <div className="container">
-        <Seo title="Home | Momovivie"></Seo>
-        {results?.map((movie) => (
-          <div className="movie" key={movie.id}>
-            <img src={`${MovieApiUrl.IMG}${movie.poster_path}`} />
-            <h4>{movie.title}</h4>
-            <div className="movie_info">
-              <span>평점:{movie.vote_average}</span>
-              <span className="release_date">개봉일:{movie.release_date}</span>
+        <Seo title="Movies | Momovivie"></Seo>
+        {isSuccess &&
+          movieList?.map((movie) => (
+            <div className="movie" key={movie.id} onClick={() => moveToDetail(movie.id)}>
+              <img src={`${MovieApiUrl.IMG}${movie.poster_path}`} />
+              <h4>{movie.title}</h4>
+              <div className="movie_info">
+                <span>평점:{movie.vote_average}</span>
+                <span className="release_date">개봉일:{movie.release_date}</span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+
+        {!isSuccess && "에러처리"}
       </div>
       <Pagination index={router.query.page} />
       <style jsx>{`
@@ -80,11 +86,12 @@ export async function getServerSideProps({ params }: MovieIndex) {
       props: {},
     };
   }
-  const url = `${MovieApiUrl.MOVIE_LIST_KO}&page=${index}&api_key=${process.env.API_KEY}`;
-  const { results } = await (await fetch(url)).json();
+
+  const { movieList, isSuccess } = await getMovieList(index);
   return {
     props: {
-      results,
+      movieList,
+      isSuccess,
     },
   };
 }
