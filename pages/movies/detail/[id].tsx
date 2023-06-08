@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 
 export default function MovieDetailPage({ movieDetail, isSuccess }: GetMovieDetailResult) {
   const router = useRouter();
-  console.log(movieDetail);
 
   // 내부를 컴포넌트로 뺴서
   // movieDetail이 있으면 있는 것으로, 없으면 없다는 것으로 렌더링시킴.
