@@ -1,4 +1,4 @@
-import { GetMovieDetailResult, MovieApiUrl, MovieDetail, parsedMovieDetail } from "@/types/movies";
+import { GetMovieDetailResult, MOVIE_API_URL, MovieDetail, parsedMovieDetail } from "@/types/movies";
 import axios from "axios";
 
 const movieDetailParser = (data: MovieDetail) => {
@@ -31,7 +31,7 @@ const getMovieDetail = async (id: number) => {
 };
 
 const getMovieDetailInstance = axios.create({
-  baseURL: MovieApiUrl.MOVIE_DETAIL,
+  baseURL: MOVIE_API_URL.MOVIE_DETAIL,
   timeout: 2500,
 });
 

@@ -1,4 +1,4 @@
-export enum MovieApiUrl {
+export enum MOVIE_API_URL {
   IMG = "https://image.tmdb.org/t/p/w500",
   MOVIE_LIST_KO = "https://api.themoviedb.org/3/movie/top_rated?language=ko-KO",
   MOVIE_LIST_EN = "https://api.themoviedb.org/3/movie/top_rated?language=en-US",

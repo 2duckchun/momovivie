@@ -6,7 +6,7 @@ export type Index = {
   index: number;
 };
 
-export enum NavigatePage {
+export enum NAVIGATE_PAGE {
   TO_PAGE = "TO_PAGE",
   TO_LEFT = "TO_LEFT",
   TO_LEFT_END = "TO_LEFT_END",

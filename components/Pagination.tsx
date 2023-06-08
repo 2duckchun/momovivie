@@ -5,28 +5,28 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
-import { NavigatePage } from "@/types/common";
+import { NAVIGATE_PAGE } from "@/types/common";
 
 export default function Pagination({ index }: any) {
   const router = useRouter();
   const pageArray = usePagination(parseInt(index));
-  const navigateToPage = (navigate: NavigatePage, page: number) => {
+  const navigateToPage = (navigate: NAVIGATE_PAGE, page: number) => {
     switch (navigate) {
-      case NavigatePage.TO_PAGE:
+      case NAVIGATE_PAGE.TO_PAGE:
         router.push(`/movies/${page}`);
         break;
-      case NavigatePage.TO_LEFT:
+      case NAVIGATE_PAGE.TO_LEFT:
         if (page - 10 <= 0) router.push(`/movies/1`);
         else router.push(`/movies/${page - 10}`);
         break;
-      case NavigatePage.TO_LEFT_END:
+      case NAVIGATE_PAGE.TO_LEFT_END:
         router.push(`/movies/1`);
         break;
-      case NavigatePage.TO_RIGHT:
+      case NAVIGATE_PAGE.TO_RIGHT:
         if (page + 10 >= 500) router.push(`/movies/500`);
         else router.push(`/movies/${page + 10}`);
         break;
-      case NavigatePage.TO_RIGHT_END:
+      case NAVIGATE_PAGE.TO_RIGHT_END:
         router.push(`/movies/500`);
         break;
     }
@@ -34,33 +34,33 @@ export default function Pagination({ index }: any) {
 
   return (
     <div className="container">
-      <div className="page_arrow" onClick={() => navigateToPage(NavigatePage.TO_LEFT_END, parseInt(index))}>
+      <div className="page_arrow" onClick={() => navigateToPage(NAVIGATE_PAGE.TO_LEFT_END, parseInt(index))}>
         <FontAwesomeIcon icon={faAnglesLeft} size="sm" />
       </div>
 
-      <div className="page_arrow" onClick={() => navigateToPage(NavigatePage.TO_LEFT, parseInt(index))}>
+      <div className="page_arrow" onClick={() => navigateToPage(NAVIGATE_PAGE.TO_LEFT, parseInt(index))}>
         <FontAwesomeIcon icon={faChevronLeft} size="sm" />
       </div>
 
       {pageArray?.map((page) => {
         if (page === parseInt(index)) {
           return (
-            <div className="page current_page" key={page} onClick={() => navigateToPage(NavigatePage.TO_PAGE, page)}>
+            <div className="page current_page" key={page} onClick={() => navigateToPage(NAVIGATE_PAGE.TO_PAGE, page)}>
               {page}
             </div>
           );
         }
         return (
-          <div className="page" key={page} onClick={() => navigateToPage(NavigatePage.TO_PAGE, page)}>
+          <div className="page" key={page} onClick={() => navigateToPage(NAVIGATE_PAGE.TO_PAGE, page)}>
             {page}
           </div>
         );
       })}
-      <div className="page_arrow" onClick={() => navigateToPage(NavigatePage.TO_RIGHT, parseInt(index))}>
+      <div className="page_arrow" onClick={() => navigateToPage(NAVIGATE_PAGE.TO_RIGHT, parseInt(index))}>
         <FontAwesomeIcon icon={faChevronRight} size="sm" />
       </div>
 
-      <div className="page_arrow" onClick={() => navigateToPage(NavigatePage.TO_RIGHT_END, parseInt(index))}>
+      <div className="page_arrow" onClick={() => navigateToPage(NAVIGATE_PAGE.TO_RIGHT_END, parseInt(index))}>
         <FontAwesomeIcon icon={faAnglesRight} size="sm" />
       </div>
 

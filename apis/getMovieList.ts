@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GetMovieListResult, MovieApiUrl, PopularMovie, movieList } from "@/types/movies";
+import { GetMovieListResult, MOVIE_API_URL, PopularMovie, movieList } from "@/types/movies";
 
 const movieListParser = (data: movieList) => {
   const movieList: movieList = data.map((el) => {
@@ -32,7 +32,7 @@ const getMovieList = async (index: number) => {
 };
 
 const getMovieListInstance = axios.create({
-  baseURL: MovieApiUrl.MOVIE_LIST_KO,
+  baseURL: MOVIE_API_URL.MOVIE_LIST_KO,
   timeout: 2500,
 });
 

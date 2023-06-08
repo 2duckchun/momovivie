@@ -1,6 +1,6 @@
 import Pagination from "@/components/Pagination";
 import Seo from "@/components/Seo";
-import { GetMovieListResult, MovieApiUrl } from "@/types/movies";
+import { GetMovieListResult, MOVIE_API_URL } from "@/types/movies";
 import type { MovieIndex } from "@/types/movies";
 import { useRouter } from "next/router";
 import getMovieList from "@/apis/getMovieList";
@@ -17,7 +17,7 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
         {isSuccess &&
           movieList?.map((movie) => (
             <div className="movie" key={movie.id} onClick={() => moveToDetail(movie.id)}>
-              <img src={`${MovieApiUrl.IMG}${movie.poster_path}`} />
+              <img src={`${MOVIE_API_URL.IMG}${movie.poster_path}`} />
               <h4>{movie.title}</h4>
               <div className="movie_info">
                 <span>평점:{movie.vote_average}</span>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Seo from "../Seo";
-import { MovieApiUrl, MovieDetailInComponent } from "@/types/movies";
+import { MOVIE_API_URL, MovieDetailInComponent } from "@/types/movies";
 
 export default function MovieDetail({ movieDetail }: MovieDetailInComponent) {
   const imageStyle = {
@@ -13,7 +13,7 @@ export default function MovieDetail({ movieDetail }: MovieDetailInComponent) {
       <Seo title={`${movieDetail.title} | Momovivie`}></Seo>
       <div className="img-container">
         <Image
-          src={`${MovieApiUrl.IMG}${movieDetail.backdrop_path}`}
+          src={`${MOVIE_API_URL.IMG}${movieDetail.backdrop_path}`}
           width={400}
           height={300}
           alt={`${movieDetail.title} 소개`}
