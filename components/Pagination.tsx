@@ -10,7 +10,6 @@ import { NavigatePage } from "@/types/common";
 export default function Pagination({ index }: any) {
   const router = useRouter();
   const pageArray = usePagination(parseInt(index));
-
   const navigateToPage = (navigate: NavigatePage, page: number) => {
     switch (navigate) {
       case NavigatePage.TO_PAGE:

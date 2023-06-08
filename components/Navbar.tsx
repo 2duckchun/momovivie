@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 export default function NavBar() {
   const router = useRouter();
-  console.log(router.pathname);
   const moveToHome = () => {
     router.push("/");
   };
@@ -15,7 +14,7 @@ export default function NavBar() {
       </h1>
       <div>
         <Link href="/movies/1" legacyBehavior>
-          <a className={router.pathname === "/movies/[page]" ? "active" : ""}>Movies</a>
+          <a className={router.pathname === "/movies/[page]" || router.pathname === "/movies/detail/[id]" ? "active" : ""}>Movies</a>
         </Link>
         <Link href="/commented" legacyBehavior>
           <a className={router.pathname === "/commented" ? "active" : ""}>Commented</a>
