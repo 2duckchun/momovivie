@@ -17,7 +17,7 @@ const movieDetailParser = (data: MovieDetail) => {
 };
 
 const getMovieDetail = async (id: number) => {
-  const url = `${id}?language=ko-KO&api_key=${process.env.API_KEY}`;
+  const url = `${id}?language=ko-KO&api_key=${process.env.NEXT_PUBLIC_MUSIC_API_KEY}`;
   const data = await getMovieDetailInstance<any, MovieDetail>(url);
   const parsedMovieDetail: GetMovieDetailResult = {
     movieDetail: null,

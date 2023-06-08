@@ -22,8 +22,9 @@ export default function MovieDetail({ movieDetail }: MovieDetailInComponent) {
           style={imageStyle}
         ></Image>
       </div>
-      <h4>{movieDetail.title}</h4>
+      <h3>{movieDetail.title}</h3>
       <p>({movieDetail.original_title})</p>
+      <p>{movieDetail.genres.join(", ").trim()}</p>
       <details>
         <summary>요약</summary>
         <p>{movieDetail.overview}</p>

@@ -2,7 +2,7 @@ import axios from "axios";
 import { GetMovieListResult, MovieApiUrl, movieList } from "@/types/movies";
 
 const getMovieList = async (index: number) => {
-  const url = `&page=${index}&api_key=${process.env.API_KEY}`;
+  const url = `&page=${index}&api_key=${process.env.NEXT_PUBLIC_MUSIC_API_KEY}`;
   const data = await getMovieListInstance<any, movieList>(url);
   const result: GetMovieListResult = {
     movieList: null,

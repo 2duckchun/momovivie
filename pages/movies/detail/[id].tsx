@@ -1,6 +1,6 @@
 import getMovieDetail from "@/apis/getMovieDetail";
 import Seo from "@/components/Seo";
-import MovieDetail from "@/components/detail/movieDetail";
+import MovieDetail from "@/components/detail/MovieDetail";
 import { GetMovieDetailResult, MovieApiUrl, MovieDetailId } from "@/types/movies";
 import { useRouter } from "next/router";
 
