@@ -4,6 +4,7 @@ import axios from "axios";
 const movieDetailParser = (data: MovieDetail) => {
   const movieDetail: parsedMovieDetail = {
     id: data.id,
+    poster_path: data.poster_path,
     adult: data.adult,
     backdrop_path: data.backdrop_path,
     genres: data.genres.map((el) => el.name),
