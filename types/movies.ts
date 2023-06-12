@@ -44,6 +44,7 @@ export type MovieDetail = {
   id: number;
   adult: boolean;
   backdrop_path: string;
+  poster_path: string;
   genres: genre[];
   overview: string;
   title: string;
@@ -56,6 +57,7 @@ export type parsedMovieDetail = {
   id: number;
   adult: boolean;
   backdrop_path: string;
+  poster_path: string;
   genres: string[];
   overview: string;
   title: string;
