@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getFirestore, Timestamp } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIRE_API_KEY,
@@ -8,8 +8,10 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIRE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIRE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIRE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIRE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const db = getFirestore(app);
+const timestamp = Timestamp;
+
+export { db, timestamp };
