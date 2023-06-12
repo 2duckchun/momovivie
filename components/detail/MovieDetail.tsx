@@ -14,8 +14,8 @@ export default function MovieDetail({ movieDetail }: MovieDetailInComponent) {
       <div className="img-container">
         <Image
           src={`${MOVIE_API_URL.IMG}${movieDetail.backdrop_path}`}
-          width={400}
-          height={300}
+          width={375}
+          height={275}
           alt={`${movieDetail.title} 소개`}
           placeholder="blur"
           blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
