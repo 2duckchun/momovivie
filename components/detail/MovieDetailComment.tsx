@@ -1,9 +1,13 @@
+import getCommentList from "@/db/getCommentList";
 import useMovieDetailComment from "@/db/useMovieDetailComment";
 import { useEffect, useState } from "react";
+import MovieDetailCommentList from "./MovieDetailCommentList";
+import useLocalStorageName from "@/utils/useLocalStorageName";
 
-export default function MovieDetailComments({ movieId }: any) {
-  const { addComment, response } = useMovieDetailComment(movieId);
-
+export default function MovieDetailComments({ movieId }: { movieId: number }) {
+  const { addComment, deleteComment, response } =
+    useMovieDetailComment(movieId);
+  const { commentList, error } = getCommentList(movieId);
   const [nickname, setNickname] = useState("");
   const [password, setPassword] = useState("");
   const [comment, setComment] = useState("");
@@ -20,21 +24,52 @@ export default function MovieDetailComments({ movieId }: any) {
   };
 
   useEffect(() => {
+    setNickname(useLocalStorageName());
+  }, []);
+
+  useEffect(() => {
     if (response.success) {
+      localStorage.setItem("nickname", nickname);
       setComment("");
     }
   }, [response.success]);
 
   return (
     <div className="container">
-      <div className="container-comment-list"></div>
+      <MovieDetailCommentList
+        commentList={commentList}
+        deleteComment={deleteComment}
+      />
       <form className="comment-form" onSubmit={handleSubmit}>
         <div className="commenter-info">
-          <input id="nickname" type="text" placeholder="닉네임" required value={nickname} onChange={handleData} />
-          <input id="password" type="password" placeholder="비밀번호" required value={password} onChange={handleData} />
+          <input
+            id="nickname"
+            type="text"
+            placeholder="닉네임"
+            required
+            maxLength={10}
+            value={nickname}
+            onChange={handleData}
+          />
+          <input
+            id="password"
+            type="password"
+            placeholder="비밀번호"
+            required
+            value={password}
+            onChange={handleData}
+          />
         </div>
         <div className="comment-info">
-          <textarea id="comment" placeholder="내용을 입력하세요." minLength={10} maxLength={200} value={comment} onChange={handleData}></textarea>
+          <textarea
+            id="comment"
+            placeholder="내용을 입력하세요."
+            minLength={10}
+            maxLength={200}
+            value={comment}
+            onChange={handleData}
+            required
+          ></textarea>
         </div>
         <button>댓글</button>
       </form>
