@@ -9,15 +9,29 @@ export default function NavBar() {
 
   return (
     <nav>
-      <h1 className={router.pathname === "/" ? "active" : ""} onClick={() => moveToHome()}>
+      <h1
+        className={router.pathname === "/" ? "active" : ""}
+        onClick={() => moveToHome()}
+      >
         MOMOVIVIE
       </h1>
       <div>
         <Link href="/movies/1" legacyBehavior>
-          <a className={router.pathname === "/movies/[page]" || router.pathname === "/movies/detail/[id]" ? "active" : ""}>Movies</a>
+          <a
+            className={
+              router.pathname === "/movies/[page]" ||
+              router.pathname === "/movies/detail/[id]"
+                ? "active"
+                : ""
+            }
+          >
+            Movies
+          </a>
         </Link>
         <Link href="/commented" legacyBehavior>
-          <a className={router.pathname === "/commented" ? "active" : ""}>Commented</a>
+          <a className={router.pathname === "/commented" ? "active" : ""}>
+            Commented
+          </a>
         </Link>
         <Link href="/about" legacyBehavior>
           <a className={router.pathname === "/about" ? "active" : ""}>About</a>
@@ -31,7 +45,8 @@ export default function NavBar() {
           align-items: center;
           padding-top: 20px;
           padding-bottom: 10px;
-          box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+          box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+            rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
         }
         nav a {
           font-size: 1rem;

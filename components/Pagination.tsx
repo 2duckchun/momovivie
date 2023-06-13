@@ -1,4 +1,4 @@
-import { usePagination } from "@/use/usePagination";
+import { usePagination } from "@/utils/usePagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
@@ -34,33 +34,57 @@ export default function Pagination({ index }: any) {
 
   return (
     <div className="container">
-      <div className="page_arrow" onClick={() => navigateToPage(NAVIGATE_PAGE.TO_LEFT_END, parseInt(index))}>
+      <div
+        className="page_arrow"
+        onClick={() =>
+          navigateToPage(NAVIGATE_PAGE.TO_LEFT_END, parseInt(index))
+        }
+      >
         <FontAwesomeIcon icon={faAnglesLeft} size="sm" />
       </div>
 
-      <div className="page_arrow" onClick={() => navigateToPage(NAVIGATE_PAGE.TO_LEFT, parseInt(index))}>
+      <div
+        className="page_arrow"
+        onClick={() => navigateToPage(NAVIGATE_PAGE.TO_LEFT, parseInt(index))}
+      >
         <FontAwesomeIcon icon={faChevronLeft} size="sm" />
       </div>
 
       {pageArray?.map((page) => {
         if (page === parseInt(index)) {
           return (
-            <div className="page current_page" key={page} onClick={() => navigateToPage(NAVIGATE_PAGE.TO_PAGE, page)}>
+            <div
+              className="page current_page"
+              key={page}
+              onClick={() => navigateToPage(NAVIGATE_PAGE.TO_PAGE, page)}
+            >
               {page}
             </div>
           );
         }
         return (
-          <div className="page" key={page} onClick={() => navigateToPage(NAVIGATE_PAGE.TO_PAGE, page)}>
+          <div
+            className="page"
+            key={page}
+            onClick={() => navigateToPage(NAVIGATE_PAGE.TO_PAGE, page)}
+          >
             {page}
           </div>
         );
       })}
-      <div className="page_arrow" onClick={() => navigateToPage(NAVIGATE_PAGE.TO_RIGHT, parseInt(index))}>
+      <div
+        className="page_arrow"
+        onClick={() => navigateToPage(NAVIGATE_PAGE.TO_RIGHT, parseInt(index))}
+      >
         <FontAwesomeIcon icon={faChevronRight} size="sm" />
       </div>
 
-      <div className="page_arrow" onClick={() => navigateToPage(NAVIGATE_PAGE.TO_RIGHT_END, parseInt(index))}>
+      <div
+        className="page_arrow"
+        onClick={() =>
+          navigateToPage(NAVIGATE_PAGE.TO_RIGHT_END, parseInt(index))
+        }
+      >
         <FontAwesomeIcon icon={faAnglesRight} size="sm" />
       </div>
 
