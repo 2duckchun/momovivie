@@ -58,7 +58,7 @@ export default function useMovieDetailComment(movieId: number) {
     try {
       const createdTime = timestamp.fromDate(new Date());
       const docRef = await addDoc(commentRef, { ...doc, createdTime });
-      await updateDoc(movieRef, {
+      const incrementCount = await updateDoc(movieRef, {
         count_comment: increment(1),
         update_comment: createdTime,
       });
@@ -73,6 +73,9 @@ export default function useMovieDetailComment(movieId: number) {
     dispatch({ type: "isPending" });
     try {
       const docRef = await deleteDoc(doc(commentRef, commentId));
+      const decrementCount = await updateDoc(movieRef, {
+        count_comment: increment(-1),
+      });
       dispatch({ type: "deleteDoc", payload: docRef });
     } catch (error: any) {
       dispatch({ type: "error", payload: error.message });
