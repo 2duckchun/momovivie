@@ -2,7 +2,7 @@ import getCommentList from "@/db/getCommentList";
 import useMovieDetailComment from "@/db/useMovieDetailComment";
 import { useEffect, useState } from "react";
 import MovieDetailCommentList from "./MovieDetailCommentList";
-import useLocalStorageName from "@/utils/useLocalStorageName";
+import localStorageName from "@/utils/useLocalStorageName";
 
 export default function MovieDetailComments({ movieId }: { movieId: number }) {
   const { addComment, deleteComment, response } =
@@ -24,7 +24,7 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
   };
 
   useEffect(() => {
-    setNickname(useLocalStorageName());
+    setNickname(localStorageName());
   }, []);
 
   useEffect(() => {
