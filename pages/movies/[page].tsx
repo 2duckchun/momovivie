@@ -16,12 +16,18 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
         <Seo title="Movies | Momovivie"></Seo>
         {isSuccess &&
           movieList?.map((movie) => (
-            <div className="movie" key={movie.id} onClick={() => moveToDetail(movie.id)}>
+            <div
+              className="movie"
+              key={movie.id}
+              onClick={() => moveToDetail(movie.id)}
+            >
               <img src={`${MOVIE_API_URL.IMG}${movie.poster_path}`} />
               <h4>{movie.title}</h4>
               <div className="movie_info">
                 <span>평점:{movie.vote_average}</span>
-                <span className="release_date">개봉일:{movie.release_date}</span>
+                <span className="release_date">
+                  개봉일:{movie.release_date}
+                </span>
               </div>
             </div>
           ))}

@@ -5,6 +5,13 @@ export enum MOVIE_API_URL {
   MOVIE_DETAIL = "https://api.themoviedb.org/3/movie/",
 }
 
+export enum MOVIE_LIST_FILTER {
+  NO_CHOICE = "NO_CHOICE",
+  COMMENT_NUM_DESC = "COMMENT_NUM_DESC",
+  AVERAGE_RATING_DESC = "AVERAGE_RATING_DESC",
+  RECENT_COMMENT = "RECENT_COMMENT",
+}
+
 export type MovieIndex = {
   params: {
     page: number;
