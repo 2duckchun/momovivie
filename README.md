@@ -10,7 +10,18 @@
 - 빠른 개발 후, 코드 리뷰를 통해 스스로 부족한 점을 파악하고 개선해나갑니다. (코드 리뷰시에는 웹 접근성과 유지보수성을 중심으로 확인해보려합니다.)
 
 ## 개발 당시 발생한 에러
-
+### react-select 도입 간 **Prop `id` did not match** 에러
+![image](https://github.com/2duckchun/momovivie/assets/92588154/03f336fd-1cfd-4bbf-9dd5-574777f2cac2)
+- 에러 난 이유
+  - select에 id가 정의되지 않아 SSR에서는 select의 id가 전역 변수(react-select-1 등)로 사용됨
+  - 이 때, Pre-render된 React Tree와 브라우저에서 render된 React Tree에 차이가 생겨 에러 메세지가 발생.
+  - 이로 인해 React Tree가 DOM과 동기화되지 않아 예기치 않은 동작이 일어날 수 있음.
+  - https://nextjs.org/docs/messages/react-hydration-error
+- 해결
+  - Select에 instanceId를 명시함.
+  - React 18에는 useId 메서드가 있어 이것을 활용하여 Id를 생성하여 Select에 추가함.
+  - StackOverFlow : https://stackoverflow.com/questions/61290173/react-select-how-do-i-resolve-warning-prop-id-did-not-match
+  - react-select issue : https://github.com/JedWatson/react-select/issues/2629
 
 ## 개발하며 느낀 의문점
 - 서버 사이드 렌더링은 서버측에서 렌더링을 한 후, 클라이언트에게 전달해주는 것이다. 즉 서버에 일정량의 부하를 가할텐데, SSR을 사용할 경우 CSR보다 서버 비용이 얼마나 청구될까?
