@@ -16,11 +16,9 @@ export default function getCommentList(movieId: number) {
       getCommentQuery,
       (snapshot) => {
         const result: Comment[] = [];
-
         snapshot.docs.forEach((doc: any) => {
           result.push({ id: doc.id, ...doc.data() });
         });
-        console.log(result);
         setCommentList(() => result);
         setError(null);
       },
