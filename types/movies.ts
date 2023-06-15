@@ -7,9 +7,9 @@ export enum MOVIE_API_URL {
 
 export enum MOVIE_LIST_FILTER {
   NO_CHOICE = "NO_CHOICE",
-  COMMENT_NUM_DESC = "COMMENT_NUM_DESC",
-  AVERAGE_RATING_DESC = "AVERAGE_RATING_DESC",
-  RECENT_COMMENT = "RECENT_COMMENT",
+  COMMENT_NUM_DESC = "count_comment",
+  AVERAGE_RATING_DESC = "vote_average",
+  RECENT_COMMENT = "update_comment",
 }
 
 export type MovieIndex = {
@@ -81,3 +81,23 @@ export type GetMovieDetailResult = {
   movieDetail: parsedMovieDetail | null;
   isSuccess: boolean;
 };
+
+export interface FilteredMovieList {
+  count_comment: number;
+  genres: genre[];
+  id: string;
+  poster_path: string;
+  title: string;
+  update_comment: any;
+  vote_average: number;
+}
+
+export interface parsedFilteredMovieList {
+  count_comment: number;
+  genres: genre[];
+  id: number;
+  poster_path: string;
+  title: string;
+  update_comment: string;
+  vote_average: number;
+}
