@@ -31,19 +31,19 @@ export default function MovieDetailCommentList({
         />
       )}
       <ul>
-        {commentList.map((el) => (
-          <li key={el.id}>
+        {commentList.map((movie) => (
+          <li key={movie.id}>
             <div className="commenter-info">
-              <span className="commenter-name">{el.nickname}</span>
+              <span className="commenter-name">{movie.nickname}</span>
               <span className="commenter-time">
-                {convertTimestamp(el.createdTime)}
+                {convertTimestamp(movie.createdTime)}
               </span>
             </div>
             <div className="comment-content">
-              <p>{el.comment}</p>
+              <pre>{movie.comment}</pre>
             </div>
             <div>
-              <button onClick={() => openModal(el.id!, el.password!)}>
+              <button onClick={() => openModal(movie.id!, movie.password!)}>
                 삭제
               </button>
             </div>
@@ -55,7 +55,9 @@ export default function MovieDetailCommentList({
             border: 1px solid gray;
             display: flex;
             font-family: "DungGeunMo";
+            justify-content: space-between;
             gap: 10px;
+            border-radius: 5px;
           }
           li + li {
             margin: 3px 0px;
@@ -77,20 +79,47 @@ export default function MovieDetailCommentList({
             text-align: center;
           }
           .comment-content {
-            width: 100%;
+            flex-grow: 1;
             display: flex;
             justify-content: center;
             align-items: center;
           }
-          .comment-content p {
+          .comment-content pre {
+            overflow: hidden;
+            flex-grow: 1;
+            font-family: "DungGeunMo";
             padding: 5px;
-            width: 100%;
+            width: 240px;
             min-height: 60px;
-            resize: none;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            text-overflow: ellipsis;
           }
           button {
-            width: 45px;
-            min-height: 30px;
+            all: unset;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 30px;
+            background-color: #f0f0f0;
+            padding: 4px 4px;
+            font-size: 12px;
+            min-height: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.21);
+            border-bottom-color: rgba(0, 0, 0, 0.34);
+            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.34) inset,
+              0 2px 0 -1px rgba(0, 0, 0, 0.13), 0 3px 0 -1px rgba(0, 0, 0, 0.08),
+              0 3px 13px -1px rgba(0, 0, 0, 0.21);
+            border-radius: 5px;
+          }
+          button:active {
+            top: 1px;
+            border-color: rgba(0, 0, 0, 0.34) rgba(0, 0, 0, 0.21)
+              rgba(0, 0, 0, 0.21);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.89),
+              0 1px rgba(0, 0, 0, 0.05) inset;
+            position: relative;
           }
         `}</style>
       </ul>

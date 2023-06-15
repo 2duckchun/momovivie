@@ -75,6 +75,7 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
       </form>
       <style jsx>{`
         .container {
+          font-family: "DungGeunMo";
           background-color: #fff;
           padding: 10px;
         }
@@ -83,6 +84,7 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
           display: flex;
           align-items: center;
           gap: 10px;
+          margin-top: 10px;
         }
         .commenter-info {
           display: flex;
@@ -91,6 +93,7 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
           justify-content: space-around;
         }
         .commenter-info input {
+          border-radius: 5px;
           max-width: 80px;
           padding: 2px 3px;
         }
@@ -106,10 +109,33 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
           width: 100%;
           min-height: 60px;
           resize: none;
+          border-radius: 5px;
         }
         button {
+          all: unset;
           width: 75px;
-          min-height: 60px;
+          min-height: 55px;
+          display: flex;
+          box-sizing: border-box;
+          justify-content: center;
+          align-items: center;
+          background-color: #f0f0f0;
+          font-size: 13px;
+          border: 1px solid rgba(0, 0, 0, 0.21);
+          border-bottom-color: rgba(0, 0, 0, 0.34);
+          text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.34) inset,
+            0 2px 0 -1px rgba(0, 0, 0, 0.13), 0 3px 0 -1px rgba(0, 0, 0, 0.08),
+            0 3px 13px -1px rgba(0, 0, 0, 0.21);
+          border-radius: 5px;
+        }
+        button:active {
+          top: 1px;
+          border-color: rgba(0, 0, 0, 0.34) rgba(0, 0, 0, 0.21)
+            rgba(0, 0, 0, 0.21);
+          box-shadow: 0 1px 0 rgba(255, 255, 255, 0.89),
+            0 1px rgba(0, 0, 0, 0.05) inset;
+          position: relative;
         }
       `}</style>
     </div>
