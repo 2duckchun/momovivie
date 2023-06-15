@@ -47,7 +47,7 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
           cursor: pointer;
         }
         .movie img {
-          min-height: 350px;
+          min-height: 250px;
           max-width: 100%;
           border-radius: 12px;
           transition: transform 0.2 ease-in-out;
@@ -76,6 +76,11 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
           width: 30px;
           height: 30px;
           background-color: teal;
+        }
+        @media (max-width: 500px) {
+          .movie_info {
+            flex-direction: column;
+          }
         }
       `}</style>
     </>
