@@ -45,8 +45,8 @@ export default function NavBar() {
           align-items: center;
           padding-top: 20px;
           padding-bottom: 10px;
-          box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-            rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+          box-shadow: rgba(50, 50, 93, 0.15) 0px 20px 30px -15px,
+            rgba(0, 0, 0, 0.15) 0px 20px 30px -20px;
         }
         nav a {
           font-size: 1rem;
