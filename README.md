@@ -10,9 +10,25 @@
 - 빠른 개발 후, 코드 리뷰를 통해 스스로 부족한 점을 파악하고 개선해나갑니다. (코드 리뷰시에는 웹 접근성과 유지보수성을 중심으로 확인해보려합니다.)
 
 ## 사용자 경험 개선 사레
+### commented 페이지 스크롤 사용환경 개선
 - commented 페이지에서 영화 디테일을 보고 난 후 뒤로가기를 누르면 이전의 스크롤 및 데이터가 날아가는 현상 발생
   - 영화 디테일을 보고 뒤로가기를 눌렀을 때 이전까지 호출했던 영화 리스트와 db의 스크롤 커서, 이전 페이지의 scroll 위치를 저장해야함.
   - 이를 구현하기 위해서는 상태관리 툴을 공부해야할 필요가 있음. (지금으로써는 마땅한 구현 방법이 떠오르지 않음)
+- router.replace 도입 실패
+  - 뒤로가기를 누를 경우 Home화면으로 이동하는 현상 발생. replace도 데이터를 캐싱하는게 아니므로 해당 방법 도입 폐기.
+- 세션스토리지로 기능을 구현해보려 했으나 실패
+  - 세션스토리지에 movieList, cursor, scrollY, filter명을 넣고 시도해보려 했으나 실패함.
+  - 원인
+    - commented 페이지에서 영화 목록을 클릭해서 진입할 경우에 들어갈 당시의 commented 페이지의 filter, cursor, scrollY, movieList 등을 저장하려고 계획함.
+    - filter와 cursor, movieList의 경우에는 commented 페이지의 최상단 부분에서 초기화되고 있는 상황이었음.
+    - 뒤로가기를 클릭했을 시 이전 commented 페이지의 환경을 조성하기 위해 filter와 cursor, movieList를 세션스토리지에서 가져와야 함.
+    - 이를 위해 최상단에서 세선스토리지를 이용해서 이전에 저장한 자료를 꺼내오려고 했으나, SSR의 특성상 window 객체가 없는 초기에 오류가 나게 됨.
+    - useEffect를 사용해 세션스토리지의 데이터를 가져온다고 하더라도, filter가 바뀌면 실행되는 useEffect의 필터링 기능때문에 원치않는 부작용이 생김.
+  - 해결방안
+    - filter, cursor, movieList, scrollY를 전역변수로 관리하고, hasSeenDetail이라는 변수를 만들어 commented에서 영화를 클릭해서 디테일을 보았는지 체크할 예정.
+    - hasSeenDetail이 true라면 처음 실행되는 filter의 경우, 동작하지 않게하고 기존에 저장해놓았던 데이터들이 화면에 렌더링하게 할 것임.
+    - hasSeenDetail이 false라면 처음 실행되는 filter의 useEffect가 동작하게 하고, 기존에 저장해놓았던 데이터들은 filter useEffect에 의해 초기화시킬 것임.
+    - 필요 라이브러리 : Redux toolkit (공부 하고 도입 예정)
 
 ## 개발 당시 발생한 에러
 ### react-select 도입 간 **Prop `id` did not match** 에러
