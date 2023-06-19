@@ -1,3 +1,5 @@
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+
 export enum MOVIE_API_URL {
   IMG = "https://image.tmdb.org/t/p/w500",
   MOVIE_LIST_KO = "https://api.themoviedb.org/3/movie/top_rated?language=ko-KO",
@@ -100,4 +102,12 @@ export interface parsedFilteredMovieList {
   title: string;
   update_comment: string;
   vote_average: number;
+}
+
+export interface MovieCommentedState {
+  filter: MOVIE_LIST_FILTER;
+  dbCursor: QueryDocumentSnapshot<DocumentData> | null;
+  movieList: parsedFilteredMovieList[];
+  scrollY: number;
+  isSeenMovieDetail: boolean;
 }
