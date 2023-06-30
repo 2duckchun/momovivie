@@ -1,4 +1,4 @@
-import { usePagination } from "@/utils/usePagination";
+import { usePagination } from "@/utils/setPagination";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
