@@ -1,59 +1,98 @@
 import Seo from "@/components/Seo";
-import FilteredMovieList from "@/components/commented/FilteredMovieList";
-import SelectFilter from "@/components/commented/SelectFilter";
-import getFilteredMovieList from "@/db/getFilteredMovieList";
-import { MOVIE_LIST_FILTER, parsedFilteredMovieList } from "@/types/movies";
-import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+import CustomSelect from "@/components/share/CustomSelect";
+import { filterOptions } from "@/db/getFilteredMovieList";
+import {
+  useCommentedContextState,
+  useCommentedDispatchContext,
+} from "@/context/FilteredMovieContext";
+import { FITERED_MOVIE_ACTION, ParsedFilteredMovieList } from "@/types/movies";
 import { useEffect, useState } from "react";
-
-const selectOption = [
-  { value: MOVIE_LIST_FILTER.COMMENT_NUM_DESC, label: "댓글 많은 순" },
-  { value: MOVIE_LIST_FILTER.AVERAGE_RATING_DESC, label: "평점 높은 순" },
-  { value: MOVIE_LIST_FILTER.RECENT_COMMENT, label: "최신 댓글 순" },
-];
+import getFilteredMovieList from "@/db/getFilteredMovieList";
+import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
+import FilteredMovieList from "@/components/commented/FilteredMovieList";
 
 export default function Commented() {
-  const [filter, setFilter] = useState({ ...selectOption[0] });
-  const [cursor, setCursor] =
-    useState<QueryDocumentSnapshot<DocumentData> | null>(null);
-  const [movieList, setMovieList] = useState<parsedFilteredMovieList[]>([]);
-  const { getMovieListSortedByFilter, hasMoreList } = getFilteredMovieList();
+  const commentedContextState = useCommentedContextState();
+  const commentedContextDispatch = useCommentedDispatchContext();
+  const [movieList, setMovieList] = useState<ParsedFilteredMovieList[]>([]);
+  const { getMovieListSortedByFilter } = getFilteredMovieList();
+
+  const setFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    commentedContextDispatch({
+      type: FITERED_MOVIE_ACTION.SET_FILTER,
+      payload: {
+        currentFilter: event,
+      },
+    });
+  };
 
   const getMoreMovie = async () => {
-    const arr = await getMovieListSortedByFilter(
-      cursor,
-      setCursor,
-      filter.value
+    const moreFiveMovie = await getMovieListSortedByFilter(
+      commentedContextState.dbCursor,
+      updateDBCursor,
+      commentedContextState.filterOption.value
     );
-    setMovieList((prev) => [...prev, ...arr]);
+    setMovieList((prev) => [...prev, ...moreFiveMovie]);
+  };
+
+  const updateDBCursor = (nextCursor: QueryDocumentSnapshot<DocumentData>) => {
+    commentedContextDispatch({
+      type: FITERED_MOVIE_ACTION.UPDATE_CURSOR,
+      payload: {
+        currentDBCursor: nextCursor,
+      },
+    });
+  };
+
+  const fetchCommentedMovieList = async (
+    cursor: any,
+    updateFn: any,
+    filter: any
+  ) => {
+    const sortedResult = await getMovieListSortedByFilter(
+      cursor,
+      updateFn,
+      filter
+    );
+    setMovieList(() => [
+      ...commentedContextState.beforeMovieList,
+      ...sortedResult,
+    ]);
   };
 
   useEffect(() => {
-    setCursor(() => null);
-    const fetchCommentedMovieList = async () => {
-      const sortedResult = await getMovieListSortedByFilter(
-        null,
-        setCursor,
-        filter.value
+    if (!commentedContextState.hasSeenDetail) {
+      commentedContextDispatch({
+        type: FITERED_MOVIE_ACTION.INITIAL_FILTER,
+      });
+      fetchCommentedMovieList(
+        commentedContextState.dbCursor,
+        updateDBCursor,
+        commentedContextState.filterOption.value
       );
-      setMovieList([...sortedResult]);
-    };
-
-    fetchCommentedMovieList();
-  }, [filter]);
+    } else {
+      setMovieList(() => [...commentedContextState.beforeMovieList]);
+      setTimeout(() => {
+        window.scrollTo(0, commentedContextState.scrollY);
+      }, 2);
+      commentedContextDispatch({
+        type: FITERED_MOVIE_ACTION.SET_SEEN_FALSE,
+      });
+    }
+  }, [commentedContextState.filterOption]);
 
   return (
     <div className="container">
       <Seo title="Commented | Momovivie"></Seo>
       <h3 className="commented-title">댓글 달린 영화 필터링!</h3>
-      <SelectFilter
-        filter={filter}
-        setFilter={setFilter}
-        selectOption={selectOption}
+      <CustomSelect
+        option={commentedContextState.filterOption}
+        setOption={setFilter}
+        initOption={filterOptions}
       />
       <FilteredMovieList movieList={movieList} />
       <button className="btn-two block" onClick={() => getMoreMovie()}>
-        {hasMoreList ? "더 보기" : "No more list"}
+        {commentedContextState.hasMoreList ? "더 보기" : "No more list"}
       </button>
       <style jsx>{`
         .container {

@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction, useState } from "react";
 import { db } from "@/firebase/config";
 import {
   DocumentData,
@@ -12,14 +11,22 @@ import {
   where,
 } from "firebase/firestore";
 import {
+  FITERED_MOVIE_ACTION,
   FilteredMovieList,
   MOVIE_LIST_FILTER,
-  parsedFilteredMovieList,
+  ParsedFilteredMovieList,
 } from "@/types/movies";
 import { convertTimestampToHourMinute } from "@/utils/convertTimestamp";
+import { useCommentedDispatchContext } from "@/context/FilteredMovieContext";
+
+export const filterOptions = [
+  { value: MOVIE_LIST_FILTER.COMMENT_NUM_DESC, label: "댓글 많은 순" },
+  { value: MOVIE_LIST_FILTER.AVERAGE_RATING_DESC, label: "평점 높은 순" },
+  { value: MOVIE_LIST_FILTER.RECENT_COMMENT, label: "최신 댓글 순" },
+];
 
 const FilteredMovieListParser = (data: FilteredMovieList) => {
-  const parsedData: parsedFilteredMovieList = {
+  const parsedData: ParsedFilteredMovieList = {
     count_comment: data.count_comment,
     genres: data.genres,
     id: parseInt(data.id),
@@ -32,61 +39,48 @@ const FilteredMovieListParser = (data: FilteredMovieList) => {
 };
 
 export default function getCommentedMovieList() {
-  const [hasMoreList, setHasMoreList] = useState(false);
+  const dispatch = useCommentedDispatchContext();
+  // const [hasMoreList, setHasMoreList] = useState(false);
   const movieCollection = collection(db, "movie_detail");
 
   const getMovieListSortedByFilter = async (
     cursor: QueryDocumentSnapshot<DocumentData> | null,
-    setCursor: Dispatch<
-      SetStateAction<QueryDocumentSnapshot<DocumentData> | null>
-    >,
+    updateSetCursor: (nextCursor: QueryDocumentSnapshot<DocumentData>) => void,
     filterValue: MOVIE_LIST_FILTER
   ) => {
-    const sortedResult: parsedFilteredMovieList[] = [];
+    const sortedResult: ParsedFilteredMovieList[] = [];
     let movieQuery;
 
-    if (filterValue === MOVIE_LIST_FILTER.COMMENT_NUM_DESC) {
-      !cursor
-        ? (movieQuery = query(
-            movieCollection,
-            where(`${filterValue}`, ">", 0),
-            orderBy(`${filterValue}`, "desc"),
-            limit(10)
-          ))
-        : (movieQuery = query(
-            movieCollection,
-            where(`${filterValue}`, ">", 0),
-            orderBy(`${filterValue}`, "desc"),
-            startAfter(cursor),
-            limit(10)
-          ));
-    } else {
-      !cursor
-        ? (movieQuery = query(
-            movieCollection,
-            where(MOVIE_LIST_FILTER.COMMENT_NUM_DESC, ">", 0),
-            orderBy(MOVIE_LIST_FILTER.COMMENT_NUM_DESC, "desc"),
-            orderBy(`${filterValue}`, "desc"),
-            limit(10)
-          ))
-        : (movieQuery = query(
-            movieCollection,
-            where(MOVIE_LIST_FILTER.COMMENT_NUM_DESC, ">", 0),
-            orderBy(MOVIE_LIST_FILTER.COMMENT_NUM_DESC, "desc"),
-            orderBy(`${filterValue}`, "desc"),
-            startAfter(cursor),
-            limit(10)
-          ));
-    }
+    !cursor
+      ? (movieQuery = query(
+          movieCollection,
+          orderBy(`${filterValue}`, "desc"),
+          limit(10)
+        ))
+      : (movieQuery = query(
+          movieCollection,
+          orderBy(`${filterValue}`, "desc"),
+          startAfter(cursor),
+          limit(10)
+        ));
 
     const movieListDocs = await getDocs(movieQuery);
     const nextCursor = movieListDocs.docs[movieListDocs.docs.length - 1];
-
     if (nextCursor) {
-      setCursor(() => nextCursor);
-      setHasMoreList(true);
+      updateSetCursor(nextCursor);
+      dispatch({
+        type: FITERED_MOVIE_ACTION.SET_MORE_LIST,
+        payload: {
+          hasMoreList: true,
+        },
+      });
     } else {
-      setHasMoreList(false);
+      dispatch({
+        type: FITERED_MOVIE_ACTION.SET_MORE_LIST,
+        payload: {
+          hasMoreList: false,
+        },
+      });
     }
 
     movieListDocs.docs.forEach((doc: any) => {
@@ -94,8 +88,8 @@ export default function getCommentedMovieList() {
       sortedResult.push({ ...parsedData });
     });
 
-    return sortedResult;
+    return sortedResult.filter((el) => el.count_comment !== undefined);
   };
 
-  return { getMovieListSortedByFilter, hasMoreList };
+  return { getMovieListSortedByFilter };
 }

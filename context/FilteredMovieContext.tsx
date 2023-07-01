@@ -1,33 +1,73 @@
-import { createContext, useContext, useReducer } from "react";
-import { MOVIE_LIST_FILTER, MovieCommentedState } from "@/types/movies";
+import { Dispatch, createContext, useContext, useReducer } from "react";
+import { MovieCommentedState, FITERED_MOVIE_ACTION } from "@/types/movies";
+import { filterOptions } from "@/db/getFilteredMovieList";
 
 const initialState: MovieCommentedState = {
-  filter: MOVIE_LIST_FILTER.COMMENT_NUM_DESC,
+  filterOption: filterOptions[0],
   dbCursor: null,
-  movieList: [],
+  beforeMovieList: [],
   scrollY: 0,
-  isSeenMovieDetail: false,
+  hasMoreList: false,
+  hasSeenDetail: false,
 };
 
 const commentedContextState = createContext<MovieCommentedState | null>(null);
-const commentedContextDispatch = createContext<any>(null);
+const commentedContextDispatch = createContext<Dispatch<any> | null>(null);
 
 const filteredMovieContextReducer = (
   prevState: MovieCommentedState,
   action: any
 ): MovieCommentedState => {
   switch (action.type) {
-    case "ENTER_MOVIE_DETAIL":
-      console.log("띠용", prevState);
+    case FITERED_MOVIE_ACTION.ENTER_DETAIL:
       return {
-        filter: action.payload.filter,
-        dbCursor: action.payload.dbCursor,
-        movieList: action.payload.movieList,
-        scrollY: action.payload.scrollY,
-        isSeenMovieDetail: true,
+        ...prevState,
+        scrollY: window.scrollY,
+        beforeMovieList: action.payload.beforeMovieList,
+        hasSeenDetail: true,
       };
+
+    case FITERED_MOVIE_ACTION.INITIAL_FILTER:
+      return {
+        ...prevState,
+        dbCursor: null,
+        beforeMovieList: [],
+        scrollY: 0,
+        hasSeenDetail: false,
+      };
+
+    case FITERED_MOVIE_ACTION.SET_SEEN_FALSE:
+      return {
+        ...prevState,
+        hasSeenDetail: false,
+        scrollY: 0,
+      };
+
+    case FITERED_MOVIE_ACTION.SET_FILTER:
+      return {
+        hasMoreList: false,
+        filterOption: action.payload.currentFilter,
+        dbCursor: null,
+        beforeMovieList: [],
+        scrollY: 0,
+        hasSeenDetail: false,
+      };
+
+    case FITERED_MOVIE_ACTION.UPDATE_CURSOR:
+      return {
+        ...prevState,
+        dbCursor: action.payload.currentDBCursor,
+      };
+
+    case FITERED_MOVIE_ACTION.SET_MORE_LIST:
+      console.log(action);
+      return {
+        ...prevState,
+        hasMoreList: action.payload.hasMoreList,
+      };
+
     default:
-      return { ...prevState };
+      return prevState;
   }
 };
 
@@ -56,9 +96,9 @@ export const useCommentedContextState = () => {
   return state;
 };
 
-export const FilteredMovieDispatchContext = () => {
-  const state = useContext(commentedContextDispatch);
-  if (!state)
+export const useCommentedDispatchContext = () => {
+  const dispatch = useContext(commentedContextDispatch);
+  if (!dispatch)
     throw new Error("commented Dispatch를 컨텍스트를 찾을 수 없습니다.");
-  return state;
+  return dispatch;
 };

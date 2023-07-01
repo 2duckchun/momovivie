@@ -1,14 +1,29 @@
-import { MOVIE_API_URL, parsedFilteredMovieList } from "@/types/movies";
+import {
+  useCommentedDispatchContext,
+  useCommentedContextState,
+} from "@/context/FilteredMovieContext";
+import {
+  FITERED_MOVIE_ACTION,
+  MOVIE_API_URL,
+  ParsedFilteredMovieList,
+} from "@/types/movies";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default function FilteredMovieList({
   movieList,
 }: {
-  movieList: parsedFilteredMovieList[];
+  movieList: ParsedFilteredMovieList[];
 }) {
+  const commentedDispatch = useCommentedDispatchContext();
   const router = useRouter();
   const moveToDetail = (id: number) => {
+    commentedDispatch({
+      type: FITERED_MOVIE_ACTION.ENTER_DETAIL,
+      payload: {
+        beforeMovieList: movieList,
+      },
+    });
     router.push(`/movies/detail/${id}`);
   };
   return (
