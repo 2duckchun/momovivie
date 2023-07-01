@@ -14,6 +14,14 @@ export enum MOVIE_LIST_FILTER {
   RECENT_COMMENT = "update_comment",
 }
 
+export enum FITERED_MOVIE_ACTION {
+  ENTER_DETAIL,
+  INITIAL_STATE,
+  SET_SEEN_FALSE,
+  SET_FILTER,
+  UPDATE_CURSOR,
+}
+
 export type MovieIndex = {
   params: {
     page: number;
@@ -104,10 +112,15 @@ export interface parsedFilteredMovieList {
   vote_average: number;
 }
 
+export type filterOption = {
+  value: MOVIE_LIST_FILTER;
+  label: string;
+};
+
 export interface MovieCommentedState {
-  filter: MOVIE_LIST_FILTER;
+  filter: filterOption;
   dbCursor: QueryDocumentSnapshot<DocumentData> | null;
-  movieList: parsedFilteredMovieList[];
+  beforeMovieList: parsedFilteredMovieList[];
   scrollY: number;
-  isSeenMovieDetail: boolean;
+  hasSeenMovieDetail: boolean;
 }
