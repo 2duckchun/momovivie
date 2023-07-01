@@ -1,8 +1,8 @@
 import axios from "axios";
-import { GetMovieListResult, MOVIE_API_URL, PopularMovie, movieList } from "@/types/movies";
+import { GetMovieListResult, MOVIE_API_URL, MovieList } from "@/types/movies";
 
-const movieListParser = (data: movieList) => {
-  const movieList: movieList = data.map((el) => {
+const movieListParser = (data: MovieList) => {
+  const movieList: MovieList = data.map((el) => {
     return {
       adult: el.adult,
       id: el.id,
@@ -19,7 +19,7 @@ const movieListParser = (data: movieList) => {
 
 const getMovieList = async (index: number) => {
   const url = `&page=${index}&api_key=${process.env.NEXT_PUBLIC_MUSIC_API_KEY}`;
-  const data = await getMovieListInstance<any, movieList>(url);
+  const data = await getMovieListInstance<any, MovieList>(url);
   const result: GetMovieListResult = {
     movieList: null,
     isSuccess: false,

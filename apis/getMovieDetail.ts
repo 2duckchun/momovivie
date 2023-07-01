@@ -1,14 +1,22 @@
-import { GetMovieDetailResult, MOVIE_API_URL, MovieDetail, parsedMovieDetail } from "@/types/movies";
+import {
+  GetMovieDetailResult,
+  MOVIE_API_URL,
+  MovieDetail,
+  ParsedMovieDetail,
+} from "@/types/movies";
 import axios from "axios";
 
 const movieDetailParser = (data: MovieDetail) => {
-  const movieDetail: parsedMovieDetail = {
+  const movieDetail: ParsedMovieDetail = {
     id: data.id,
     poster_path: data.poster_path,
     adult: data.adult,
     backdrop_path: data.backdrop_path,
     genres: data.genres.map((el) => el.name),
-    overview: data.overview === "" ? "아쉽게도 요약 정보가 없네용...ㅠoㅠ" : data.overview,
+    overview:
+      data.overview === ""
+        ? "아쉽게도 요약 정보가 없네용...ㅠoㅠ"
+        : data.overview,
     title: data.title,
     original_title: data.original_title,
     vote_average: data.vote_average,

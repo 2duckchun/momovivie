@@ -8,18 +8,18 @@ export enum MOVIE_API_URL {
 }
 
 export enum MOVIE_LIST_FILTER {
-  NO_CHOICE = "NO_CHOICE",
   COMMENT_NUM_DESC = "count_comment",
   AVERAGE_RATING_DESC = "vote_average",
   RECENT_COMMENT = "update_comment",
 }
 
 export enum FITERED_MOVIE_ACTION {
-  ENTER_DETAIL,
-  INITIAL_STATE,
-  SET_SEEN_FALSE,
-  SET_FILTER,
-  UPDATE_CURSOR,
+  ENTER_DETAIL, // 디테일 들어갔을 때 세부사항 저장
+  INITIAL_FILTER, // 필터 초기화
+  SET_SEEN_FALSE, // DETAIL FALSE로
+  SET_FILTER, // 필터 셋팅
+  UPDATE_CURSOR, // 커서 업데이트
+  SET_MORE_LIST,
 }
 
 export type MovieIndex = {
@@ -45,14 +45,14 @@ export type PopularMovie = {
   vote_average: number;
 };
 
-export type movieList = PopularMovie[];
+export type MovieList = PopularMovie[];
 
 export type GetMovieListResult = {
-  movieList: movieList | null;
+  movieList: MovieList | null;
   isSuccess: boolean;
 };
 
-export type genre = {
+export type Genre = {
   id: number;
   name: string;
 };
@@ -62,7 +62,7 @@ export type MovieDetail = {
   adult: boolean;
   backdrop_path: string;
   poster_path: string;
-  genres: genre[];
+  genres: Genre[];
   overview: string;
   title: string;
   original_title: string;
@@ -70,7 +70,7 @@ export type MovieDetail = {
   release_date: string;
 };
 
-export type parsedMovieDetail = {
+export type ParsedMovieDetail = {
   id: number;
   adult: boolean;
   backdrop_path: string;
@@ -84,17 +84,17 @@ export type parsedMovieDetail = {
 };
 
 export type MovieDetailInComponent = {
-  movieDetail: parsedMovieDetail;
+  movieDetail: ParsedMovieDetail;
 };
 
 export type GetMovieDetailResult = {
-  movieDetail: parsedMovieDetail | null;
+  movieDetail: ParsedMovieDetail | null;
   isSuccess: boolean;
 };
 
 export interface FilteredMovieList {
   count_comment: number;
-  genres: genre[];
+  genres: Genre[];
   id: string;
   poster_path: string;
   title: string;
@@ -102,9 +102,9 @@ export interface FilteredMovieList {
   vote_average: number;
 }
 
-export interface parsedFilteredMovieList {
+export interface ParsedFilteredMovieList {
   count_comment: number;
-  genres: genre[];
+  genres: Genre[];
   id: number;
   poster_path: string;
   title: string;
@@ -112,15 +112,16 @@ export interface parsedFilteredMovieList {
   vote_average: number;
 }
 
-export type filterOption = {
+export type FilterOption = {
   value: MOVIE_LIST_FILTER;
   label: string;
 };
 
 export interface MovieCommentedState {
-  filter: filterOption;
+  filterOption: FilterOption;
   dbCursor: QueryDocumentSnapshot<DocumentData> | null;
-  beforeMovieList: parsedFilteredMovieList[];
+  beforeMovieList: ParsedFilteredMovieList[];
   scrollY: number;
-  hasSeenMovieDetail: boolean;
+  hasMoreList: boolean;
+  hasSeenDetail: boolean;
 }

@@ -1,8 +1,8 @@
-import { parsedMovieDetail } from "@/types/movies";
+import { ParsedMovieDetail } from "@/types/movies";
 import { db } from "@/firebase/config";
 import { doc, setDoc } from "firebase/firestore";
 
-export default function addMovieDetail(movieDetail: parsedMovieDetail) {
+export default function addMovieDetail(movieDetail: ParsedMovieDetail) {
   const movieDetailRef = doc(db, "movie_detail", `${movieDetail.id}`);
   const data = {
     id: movieDetail?.id,
