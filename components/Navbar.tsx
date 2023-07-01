@@ -1,22 +1,37 @@
-import Link from "next/link";
+import { useCommentedDispatchContext } from "@/context/FilteredMovieContext";
+import { FITERED_MOVIE_ACTION } from "@/types/movies";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 
 export default function NavBar() {
   const router = useRouter();
-  const moveToHome = () => {
-    router.push("/");
-  };
+  const commentedDispatch = useCommentedDispatchContext();
+  const moveTo = (path: string) => {
+    if (
+      router.pathname === "/movies/detail/[id]" ||
+      router.pathname === "/commented"
+    ) {
+      commentedDispatch({
+        type: FITERED_MOVIE_ACTION.INITIAL_FILTER,
+      });
+    }
 
+    router.push(path);
+  };
   return (
     <nav>
       <h1
         className={router.pathname === "/" ? "active" : ""}
-        onClick={() => moveToHome()}
+        onClick={() => moveTo("/")}
       >
         MOMOVIVIE
       </h1>
+      <div className="back-button" onClick={() => router.back()}>
+        <FontAwesomeIcon icon={faArrowLeft} size="xl" />
+      </div>
       <div>
-        <Link href="/movies/1" legacyBehavior>
+        <div onClick={() => moveTo("/movies/1")}>
           <a
             className={
               router.pathname === "/movies/[page]" ||
@@ -27,18 +42,19 @@ export default function NavBar() {
           >
             Movies
           </a>
-        </Link>
-        <Link href="/commented" legacyBehavior>
+        </div>
+        <div onClick={() => moveTo("/commented")}>
           <a className={router.pathname === "/commented" ? "active" : ""}>
             Commented
           </a>
-        </Link>
-        <Link href="/about" legacyBehavior>
+        </div>
+        <div onClick={() => moveTo("/about")}>
           <a className={router.pathname === "/about" ? "active" : ""}>About</a>
-        </Link>
+        </div>
       </div>
       <style jsx>{`
         nav {
+          position: relative;
           display: flex;
           gap: 10px;
           flex-direction: column;
@@ -47,6 +63,14 @@ export default function NavBar() {
           padding-bottom: 10px;
           box-shadow: rgba(50, 50, 93, 0.15) 0px 20px 30px -15px,
             rgba(0, 0, 0, 0.15) 0px 20px 30px -20px;
+        }
+        .back-button {
+          position: absolute;
+          left: 20px;
+          top: 50px;
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
         }
         nav a {
           font-size: 1rem;
