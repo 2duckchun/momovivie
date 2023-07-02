@@ -92,23 +92,23 @@ export type GetMovieDetailResult = {
   isSuccess: boolean;
 };
 
-export interface FilteredMovieList {
-  count_comment: number;
+export interface MoviePoster {
   genres: Genre[];
   id: string;
   poster_path: string;
   title: string;
-  update_comment: any;
   vote_average: number;
+  update_comment?: any;
+  count_comment?: number;
 }
 
 export interface ParsedFilteredMovieList {
-  count_comment: number;
+  count_comment?: number;
   genres: Genre[];
   id: number;
   poster_path: string;
   title: string;
-  update_comment: string;
+  update_comment?: string;
   vote_average: number;
 }
 
