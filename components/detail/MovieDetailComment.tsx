@@ -2,35 +2,70 @@ import getCommentList from "@/db/getCommentList";
 import useMovieDetailComment from "@/db/useMovieDetailComment";
 import { useEffect, useState } from "react";
 import MovieDetailCommentList from "./MovieDetailCommentList";
-import localStorageName from "@/utils/setLocalStorageName";
+import getlocalStorageName from "@/utils/getLocalStorageName";
+import useValidation from "@/hooks/useValidation";
+import Loading from "../share/Loading";
 
 export default function MovieDetailComments({ movieId }: { movieId: number }) {
   const { addComment, deleteComment, response } =
     useMovieDetailComment(movieId);
-  const { commentList, error } = getCommentList(movieId);
-  const [nickname, setNickname] = useState("");
-  const [password, setPassword] = useState("");
-  const [comment, setComment] = useState("");
+  const { validator, error, setError } = useValidation();
+  const { commentList } = getCommentList(movieId);
+  const [commentInfo, setCommentInfo] = useState({
+    nickname: "",
+    password: "",
+    comment: "",
+  });
 
   const handleData = (event: any) => {
-    if (event.target.id === "nickname") setNickname(event.target.value);
-    else if (event.target.id === "password") setPassword(event.target.value);
-    else if (event.target.id === "comment") setComment(event.target.value);
+    setError({
+      isError: false,
+      errorMessage: "",
+    });
+
+    setCommentInfo({
+      ...commentInfo,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleOnKeyPress = (event: any) => {
+    event.preventDefault();
+    if (event.key === "Enter" && event.shiftKey) {
+      return;
+    }
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
   };
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    addComment({ nickname, password, comment });
+    const isValidInfo = validator(
+      commentInfo.nickname,
+      commentInfo.password,
+      commentInfo.comment
+    );
+    if (isValidInfo) {
+      addComment({ ...commentInfo });
+    }
   };
 
   useEffect(() => {
-    setNickname(localStorageName());
+    const localName = getlocalStorageName();
+    setCommentInfo({
+      ...commentInfo,
+      nickname: localName,
+    });
   }, []);
 
   useEffect(() => {
     if (response.success) {
-      localStorage.setItem("nickname", nickname);
-      setComment("");
+      localStorage.setItem("nickname", commentInfo.nickname);
+      setCommentInfo({
+        ...commentInfo,
+        comment: "",
+      });
     }
   }, [response.success]);
 
@@ -40,39 +75,51 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
         commentList={commentList}
         deleteComment={deleteComment}
       />
-      <form className="comment-form" onSubmit={handleSubmit}>
+      <form
+        className="comment-form"
+        onSubmit={handleSubmit}
+        onKeyUp={handleOnKeyPress}
+      >
         <div className="commenter-info">
           <input
             id="nickname"
+            name="nickname"
             type="text"
             placeholder="닉네임"
             required
             maxLength={10}
-            value={nickname}
+            value={commentInfo.nickname}
             onChange={handleData}
           />
           <input
             id="password"
+            name="password"
             type="password"
             placeholder="비밀번호"
             required
-            value={password}
+            value={commentInfo.password}
             onChange={handleData}
           />
         </div>
         <div className="comment-info">
-          <textarea
-            id="comment"
-            placeholder="내용을 입력하세요."
-            minLength={10}
-            maxLength={200}
-            value={comment}
-            onChange={handleData}
-            required
-          ></textarea>
+          {response.isPending ? (
+            <Loading />
+          ) : (
+            <textarea
+              id="comment"
+              name="comment"
+              placeholder="내용을 입력하세요."
+              minLength={10}
+              maxLength={200}
+              value={commentInfo.comment}
+              onChange={handleData}
+              required
+            ></textarea>
+          )}
         </div>
         <button>댓글</button>
       </form>
+      <p className="error-message">{error.isError && error.errorMessage}</p>
       <style jsx>{`
         .container {
           font-family: "DungGeunMo";
@@ -136,6 +183,11 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
           box-shadow: 0 1px 0 rgba(255, 255, 255, 0.89),
             0 1px rgba(0, 0, 0, 0.05) inset;
           position: relative;
+        }
+        .error-message {
+          margin-top: 10px;
+          text-align: center;
+          color: tomato;
         }
       `}</style>
     </div>
