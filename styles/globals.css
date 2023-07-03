@@ -15,14 +15,22 @@ a {
 }
 @font-face {
   font-family: "DungGeunMo";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff") format("woff");
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GmarketSansMedium";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
+}
+
+@keyframes blink-effect {
+  50% {
+    opacity: 0;
+  }
 }
