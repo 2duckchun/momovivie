@@ -1,9 +1,9 @@
 import Seo from "@/components/Seo";
 import { useMemo } from "react";
 import Carousel from "@/components/home/Carousel";
-import useGetMovieCollectionList from "@/components/hooks/useGetRandomMovieList";
+import useGetMovieCollectionList from "@/hooks/useGetRandomMovieList";
 import getRandomMovieList from "@/utils/getRandomMovieList";
-import useTypingAnimation from "@/components/hooks/useTypingAnimation";
+import useTypingAnimation from "@/hooks/useTypingAnimation";
 
 export default function Home() {
   const movieList = useGetMovieCollectionList();
@@ -26,9 +26,9 @@ export default function Home() {
       <Carousel movieList={randomMovieList} />
       <style jsx>{`
         .welcome-message {
-          margin: 10px auto;
+          margin: 20px auto;
           text-align: center;
-          min-height: 50px;
+          min-height: 70px;
           font-family: "DungGeunMo";
           white-space: pre-wrap;
           font-size: 1.1rem;
