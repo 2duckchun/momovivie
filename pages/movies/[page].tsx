@@ -89,10 +89,20 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
 
 export async function getServerSideProps({ params }: MovieIndex) {
   let index = params.page;
-  if (index < 1) {
+
+  if (index < 1 || isNaN(params.page)) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/movies/1",
+      },
+      props: {},
+    };
+  }
+
+  if (index > 500) {
+    return {
+      redirect: {
+        destination: "/movies/500",
       },
       props: {},
     };
