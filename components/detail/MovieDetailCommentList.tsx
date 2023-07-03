@@ -56,7 +56,7 @@ export default function MovieDetailCommentList({
             display: flex;
             font-family: "DungGeunMo";
             justify-content: space-between;
-            gap: 10px;
+            gap: 3px;
             border-radius: 5px;
           }
           li + li {
