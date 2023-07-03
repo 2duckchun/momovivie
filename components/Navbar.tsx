@@ -72,6 +72,7 @@ export default function NavBar() {
           height: 24px;
         }
         nav a {
+          cursor: pointer;
           font-size: 1rem;
           font-family: "GmarketSansMedium";
         }
@@ -87,7 +88,6 @@ export default function NavBar() {
         nav div {
           display: flex;
           gap: 10px;
-          cursor: pointer;
         }
       `}</style>
     </nav>
