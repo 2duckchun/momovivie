@@ -9,6 +9,10 @@ export default function convertTimestamp(timestamp: Timestamp) {
 }
 
 export function convertTimestampToHourMinute(timestamp: Timestamp) {
+  if (!timestamp) {
+    return "댓글이 없어요 ㅠoㅠ";
+  }
+
   let date = timestamp?.toDate();
   let minute = date?.getMinutes();
   let hour = date?.getHours();
