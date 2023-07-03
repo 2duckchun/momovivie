@@ -4,12 +4,12 @@ import { GetMovieListResult, MOVIE_API_URL } from "@/types/movies";
 import type { MovieIndex } from "@/types/movies";
 import { useRouter } from "next/router";
 import getMovieList from "@/apis/getMovieList";
+import Loading from "@/components/share/Loading";
+import useMoveToDetail from "@/hooks/useMoveToDetail";
 
 export default function Home({ movieList, isSuccess }: GetMovieListResult) {
   const router = useRouter();
-  const moveToDetail = (id: number) => {
-    router.push(`/movies/detail/${id}`);
-  };
+  const { moveToDetail } = useMoveToDetail();
   return (
     <>
       <div className="container">
@@ -32,7 +32,7 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
             </div>
           ))}
 
-        {!isSuccess && "에러처리"}
+        {!isSuccess && <Loading />}
       </div>
       <Pagination index={router.query.page} />
       <style jsx>{`
