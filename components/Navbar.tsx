@@ -16,9 +16,9 @@ export default function NavBar() {
         type: FITERED_MOVIE_ACTION.INITIAL_FILTER,
       });
     }
-
     router.push(path);
   };
+
   return (
     <nav>
       <h1
@@ -27,7 +27,7 @@ export default function NavBar() {
       >
         MOMOVIVIE
       </h1>
-      <div className="back-button" onClick={() => router.back()}>
+      <div className="nav-button" onClick={() => router.back()}>
         <FontAwesomeIcon icon={faArrowLeft} size="xl" />
       </div>
       <div>
@@ -64,13 +64,12 @@ export default function NavBar() {
           box-shadow: rgba(50, 50, 93, 0.15) 0px 20px 30px -15px,
             rgba(0, 0, 0, 0.15) 0px 20px 30px -20px;
         }
-        .back-button {
+        .nav-button {
           position: absolute;
           left: 20px;
           top: 50px;
           width: 24px;
           height: 24px;
-          cursor: pointer;
         }
         nav a {
           font-size: 1rem;
@@ -88,6 +87,7 @@ export default function NavBar() {
         nav div {
           display: flex;
           gap: 10px;
+          cursor: pointer;
         }
       `}</style>
     </nav>
