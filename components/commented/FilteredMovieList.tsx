@@ -9,6 +9,7 @@ import {
 } from "@/types/movies";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Loading from "../share/Loading";
 
 export default function FilteredMovieList({
   movieList,
@@ -27,37 +28,45 @@ export default function FilteredMovieList({
     router.push(`/movies/detail/${id}`);
   };
   return (
-    <ul>
-      {movieList.map((movie) => (
-        <li key={movie.id} onClick={() => moveToDetail(movie.id)}>
-          <div className="img-container">
-            <Image
-              src={`${MOVIE_API_URL.IMG}${movie.poster_path}`}
-              width={150}
-              height={210}
-              alt={`${movie.title} 소개`}
-              placeholder="blur"
-              blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
-            />
-            <p>평점 : {`${movie.vote_average.toFixed(2)}`}</p>
-          </div>
-          <div className="movie-info-container">
-            <h4>{movie.title}</h4>
-            <div className="info-wrapper">
-              <p>
-                <strong>장르</strong> : {`${movie.genres.join(", ").trim()}`}
-              </p>
-              <p>
-                <strong>댓글 수</strong> : {`${movie.count_comment}개`}
-              </p>
-              <p>
-                <strong>댓글 업데이트</strong> : <br />
-                <span className="recent-date-comment">{`${movie.update_comment}`}</span>
-              </p>
-            </div>
-          </div>
-        </li>
-      ))}
+    <>
+      {movieList.length === 0 ? (
+        <Loading />
+      ) : (
+        <ul>
+          {movieList.map((movie) => (
+            <li key={movie.id} onClick={() => moveToDetail(movie.id)}>
+              <div className="img-container">
+                <Image
+                  src={`${MOVIE_API_URL.IMG}${movie.poster_path}`}
+                  width={150}
+                  height={210}
+                  alt={`${movie.title} 소개`}
+                  placeholder="blur"
+                  blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+                />
+                <p>평점 : {`${movie.vote_average.toFixed(2)}`}</p>
+              </div>
+              <div className="movie-info-container">
+                <h4>{movie.title}</h4>
+                <div className="info-wrapper">
+                  <p>
+                    <strong>장르</strong> :{" "}
+                    {`${movie.genres.join(", ").trim()}`}
+                  </p>
+                  <p>
+                    <strong>댓글 수</strong> : {`${movie.count_comment}개`}
+                  </p>
+                  <p>
+                    <strong>댓글 업데이트</strong> : <br />
+                    <span className="recent-date-comment">{`${movie.update_comment}`}</span>
+                  </p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
       <style jsx>{`
         ul {
           padding: 15px
@@ -100,6 +109,6 @@ export default function FilteredMovieList({
           font-size: 13px;
         }
       `}</style>
-    </ul>
+    </>
   );
 }
