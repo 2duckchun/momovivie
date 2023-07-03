@@ -1,8 +1,8 @@
 export interface AddCommentReducer {
-  isPendeing?: boolean;
-  document?: any;
-  success?: boolean;
-  error?: any;
+  isPending: boolean;
+  document: any;
+  success: boolean;
+  error: any;
 }
 
 export interface DocsComment {
