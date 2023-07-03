@@ -8,11 +8,9 @@ import {
   orderBy,
   query,
   startAfter,
-  where,
 } from "firebase/firestore";
 import {
   FITERED_MOVIE_ACTION,
-  FilteredMovieList,
   MOVIE_LIST_FILTER,
   ParsedFilteredMovieList,
 } from "@/types/movies";
@@ -25,9 +23,9 @@ export const filterOptions = [
   { value: MOVIE_LIST_FILTER.RECENT_COMMENT, label: "최신 댓글 순" },
 ];
 
-const FilteredMovieListParser = (data: FilteredMovieList) => {
+const FilteredMovieListParser = (data: DocumentData) => {
   const parsedData: ParsedFilteredMovieList = {
-    count_comment: data.count_comment,
+    count_comment: data.count_comment ?? 0,
     genres: data.genres,
     id: parseInt(data.id),
     poster_path: data.poster_path,
@@ -40,7 +38,6 @@ const FilteredMovieListParser = (data: FilteredMovieList) => {
 
 export default function getCommentedMovieList() {
   const dispatch = useCommentedDispatchContext();
-  // const [hasMoreList, setHasMoreList] = useState(false);
   const movieCollection = collection(db, "movie_detail");
 
   const getMovieListSortedByFilter = async (
@@ -83,12 +80,12 @@ export default function getCommentedMovieList() {
       });
     }
 
-    movieListDocs.docs.forEach((doc: any) => {
+    movieListDocs.docs.forEach((doc) => {
       const parsedData = FilteredMovieListParser({ ...doc.data(), id: doc.id });
       sortedResult.push({ ...parsedData });
     });
 
-    return sortedResult.filter((el) => el.count_comment !== undefined);
+    return sortedResult;
   };
 
   return { getMovieListSortedByFilter };
