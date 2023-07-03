@@ -60,7 +60,6 @@ const filteredMovieContextReducer = (
       };
 
     case FITERED_MOVIE_ACTION.SET_MORE_LIST:
-      console.log(action);
       return {
         ...prevState,
         hasMoreList: action.payload.hasMoreList,
