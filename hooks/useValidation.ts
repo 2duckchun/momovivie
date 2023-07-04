@@ -7,7 +7,7 @@ export default function useValidation() {
   });
 
   const validator = (name: string, password: string, comment: string) => {
-    if (name.length < 2) {
+    if (name.length < 2 || name.length > 10) {
       setError({
         isError: true,
         errorMessage: "닉네임은 2글자 이상 입력해주세요!",
@@ -19,10 +19,10 @@ export default function useValidation() {
         errorMessage: "비밀번호는 4글자 이상 입력해주세요!",
       });
       return false;
-    } else if (comment.length < 1) {
+    } else if (comment.length < 1 || comment.length > 200) {
       setError({
         isError: true,
-        errorMessage: "댓글은 1글자 이상 입력해주세요!",
+        errorMessage: "댓글은 1글자 이상 200글자 이하로 입력해주세요!",
       });
       return false;
     }
