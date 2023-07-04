@@ -1,66 +1,156 @@
 # MOMOVIVIE
-## 프로젝트 목적
-- 명작 반열에 든 영화들을 랭킹순으로 확인할 수 있고, 각 영화에 대한 타인들의 평가도 체크할 수 있는 사이트를 구축합니다.
-- 이 사이트를 통해 볼만한 영화들을 빠르게 선택할 수 있습니다.
-- 심심풀이 + 커뮤니티 용도로도 활용할 수 있습니다.
 
-## 이 프로젝트를 통해 달성하고자 하는 개인적 목적
-- Next.js의 입문작으로써, 이 프로젝트를 통해 프레임워크를 숙달합니다. (SSR을 경험하는데 의의를 둡니다.)
-- 파이어베이스+파이어스토어를 도입하여 프로젝트에 알맞게 컬렉션, 도큐먼트를 구성해봄으로써 지식의 범주를 넓힙니다.
-- 빠른 개발 후, 코드 리뷰를 통해 스스로 부족한 점을 파악하고 개선해나갑니다. (코드 리뷰시에는 웹 접근성과 유지보수성을 중심으로 확인해보려합니다.)
+- 프로젝트 주소 : https://momovivie-2dc.web.app/
 
-## 사용경험 개선
-### commented 페이지에서 영화 디테일을 보고 난 후 뒤로가기를 누르면 이전의 스크롤 및 데이터가 날아가는 현상 발생
-- 영화 디테일을 보고 뒤로가기를 눌렀을 때 디테일을 보기 전 commented 페이지의 원래 화면을 보존해야 함.
-- 이를 구현하기 위해 영화 디테일을 클릭했을 경우, commented 페이지의 filter, movieList, 영화를 DB에서 호출하는 기준점인 cursor(파이어베이스의 페이지네이션 단위), 이전 페이지의 scroll 위치를 저장해야함.
-  - 즉, 렌더링에 관여하는 모든 state 값과 scrollY 값을 저장해야만 함.
+## 프로젝트 설명
 
-**1. router.replace 도입 실패**
-  - 뒤로가기를 누를 경우 Home화면으로 이동하는 현상 발생. replace도 데이터를 캐싱하는게 아니므로 해당 방법 도입 폐기.
+> 영화가 보고싶지만 보고싶은 영화는 딱히 없을 때 사용하면 좋은 어플리케이션입니다.
 
-**2. 세션스토리지로 기능을 구현해보려 했으나 실패**
-  - 세션스토리지에 movieList, cursor, scrollY, filter명을 넣고 시도해보려 했으나 실패함.
-  - `원인`
-    - commented 페이지에서 영화 목록을 클릭해서 진입할 경우에 들어갈 당시의 commented 페이지의 filter, cursor, scrollY, movieList 등을 세션스토리지에 저장하려고 계획함.
-    - filter와 cursor, movieList의 경우에는 commented 페이지의 최상단 부분에서 초기화되고 있는 상황이었음.
-    - 뒤로가기를 클릭했을 시 이전 commented 페이지의 환경을 조성하기 위해 filter와 cursor, movieList를 세션스토리지에서 가져와야 함.
-    - 이를 위해 최상단에서 세선스토리지를 이용해서 이전에 저장한 자료를 꺼내오려고 했으나, SSR의 특성상 window 객체가 없는 초기에 오류가 나게 됨.
-    - useEffect를 사용해 세션스토리지의 데이터를 가져온다고 하더라도, filter가 바뀌면 실행되는 useEffect의 필터링 기능때문에 원치않는 부작용이 생김.
-  - `해결방안`
-    - filter, cursor, movieList, scrollY를 전역변수로 관리하고 hasSeenDetail이라는 변수를 만들어 commented에서 영화를 클릭해서 디테일을 보았는지 체크할 예정.
-    - hasSeenDetail이 true라면 처음 실행되는  useEffect[filter]가 동작하지 않게하고, 기존에 저장해놓았던 데이터들을 화면에 렌더링할 것임.
-    - hasSeenDetail이 false라면 처음 실행되는 useEffect[filter]를 동작시키고, 기존에 저장해놓았던 데이터들은 filter useEffect에 의해 초기화시킬 것임.
-    - 필요 라이브러리 : `Redux toolkit` (공부 하고 도입 예정)
+- 유저들이 한번이라도 클릭했었던 영화 중 랜덤하게 10개를 뽑아 영화를 추천해줍니다.
+- 랭킹별 영화(평점 1위~10000위)를 확인할 수 있습니다.
+- 각 영화에 감상평 등 댓글을 달 수 있으며, 댓글이 달린 영화의 필터링이 가능합니다.
 
-## 개발 당시 발생한 에러
-### react-select 도입 간 **Prop `id` did not match** 에러
-![image](https://github.com/2duckchun/momovivie/assets/92588154/03f336fd-1cfd-4bbf-9dd5-574777f2cac2)
-- 에러 난 이유
-  - select에 id가 정의되지 않아 SSR에서는 select의 id가 전역 변수(react-select-1 등)로 사용됨
-  - 이 때, Pre-render된 React Tree와 브라우저에서 render된 React Tree에 차이가 생겨 에러 메세지가 발생.
-  - 이로 인해 React Tree가 DOM과 동기화되지 않아 예기치 않은 동작이 일어날 수 있음.
-  - https://nextjs.org/docs/messages/react-hydration-error
-- 해결
-  - Select에 instanceId를 명시함.
-  - React 18에는 useId 메서드가 있어 이것을 활용하여 Id를 생성하여 Select에 추가함.
-  - StackOverFlow : https://stackoverflow.com/questions/61290173/react-select-how-do-i-resolve-warning-prop-id-did-not-match
-  - react-select issue : https://github.com/JedWatson/react-select/issues/2629
+## 제작 동기
 
-## 개발하며 느낀 의문점
-- 서버 사이드 렌더링은 서버측에서 렌더링을 한 후, 클라이언트에게 전달해주는 것이다. 즉 서버에 일정량의 부하를 가할텐데, SSR을 사용할 경우 CSR보다 서버 비용이 얼마나 청구될까?
-- 페이지네이션을 구현할 때, 페이지네이션 알고리즘의 파라미터 타입을 숫자로 했다. 하지만 쿼리로 입력되는 것이기 때문에 사용자에 의해 쿼리가 숫자로 입력되지 않을 수 있다. 이 때 페이지네이션 파라미터의 타입을 사용자의 입력을 고려하여 any나 다른 문자열 등으로 해야할지, 내가 의도한 number로 해야할지 의문이 생겼다.
+- Next.js를 배울 목적으로 시작한 개인 토이프로젝트입니다.
+- 멋진 영화 API를 발견했고, 이를 이용해 실제로 사용할 수 있는 앱을 만들 수 있다고 생각했습니다.
+
+## 주요 기술
+
+- Next.js : Next.js 13버전을 사용하여 앱을 빌드했습니다.
+- Firebase : 영화 db 저장, 댓글 기능을 구현하기 위해 파이어베이스를 사용했습니다.
+- TypeScript : 엄격한 문법 지원을 통한 유지보수 및 개발 편의성을 위해 사용했습니다.
+
+## 문제 발견 및 해결 과정
+
+### 필터된 영화를 본 후 뒤로가기 시 기존 화면 정보 손실
+
+- 필터링된 영화를 보다가 뒤로가기를 클릭할 경우, 화면이 초기화 되었습니다.
+- 이는 심각한 사용자 경험 저하를 가져왔습니다.
+- 이를 해결하기 위해서 이전 화면 데이터들의 보존이 필요했습니다.
+- 초기에는 세션 스토리지에 데이터를 보관하는 것을 구상했습니다.
+  - 세션 스토리지에 객체를 보관하면 객체의 프로토타입이 바뀌는 것을 알게 되었습니다.
+  - 필터에 필요한 DB 커서는 firebase 고유 프로토타입이 존재했습니다.
+  - 따라서, 이 방법은 제 상황에 올바른 방법이 아니라 판단하여 철회했습니다.
+- **Context API 도입으로 문제를 해결했습니다.**
+  - 데이터 유형을 보존하면서도, state를 전역적으로 안전하게 보관할 수 있는 방법인 Context API을 도입하여 문제를 해결했습니다.
+  - 필터링에 관한 데이터를 Context API 내부에 선언한 useReducer로 관리 했습니다.
+  - 사이트의 규모가 커진다면 리렌더링을 막기위해 상태관리 전용 라이브러리를 도입해볼 수 있겠다고 생각하게 되었습니다.
+
+### peer dependencies 해결
+
+- react-select 라이브러리를 도입 후 발견한 의존성 관련 문제였습니다.
+- Next.js와 react-select가 같은 의존성인 emotion/react를 사용했는데 버전이 달라 peer dependencies 경고가 생겼습니다.
+- node.js 공식문서 및 검색을 통해 peer dependencies 문제를 인지했습니다.
+- **react-select의 package.json을 직접 수정해 의존성 중복 문제를 해결했습니다.**
+- 과도한 라이브러리의 도입은 의존성 문제를 크게 만들 수 있다는 것을 체감하게 되었습니다.
+- 문제 해결에 관련된 자세한 이야기를 [블로그](https://2duckchun.tistory.com/468)에 정리해서 포스팅했습니다.
+
+### 리액트 숙련도 문제
+
+- Next.js를 배우고자 시작한 프로젝트이지만, 리액트 라이브러리에 대해 깊은 이해 없이 프로젝트를 시작했습니다.
+- 이는 이해하기 어려운 사이드 이펙트와 로직의 복잡함으로 이어졌습니다.
+- 따라서, 개발 이전에 리액트에 대한 이해도를 키워야 한다고 판단했습니다.
+- 이 후, **약 2주간 리액트 공식문서의 가이드를 이해하고 번역하는 시간을 가졌습니다.**
+- 시간을 들여 공부한 후, 리액트의 기능을 비교적 의도적으로 도입할 수 있게 되었으며, 리액트의 기능 도입을 컴포넌트의 시점에서 판단할 수 있게 되었습니다.
 
 ## 설계
-### API
-- axios, interceptor 기능 활용 시도 및 DTO와 View단에서 쓰이는 데이터를 분리 (Repository 패턴?)
-### Backend
-- 영화 Detail을 볼 수 있어야 하고, 해당 영화의 detail에 댓글을 달 수 있어야 함.
-  - 영화의 Detail을 불러오는 api와 Detail에 대한 댓글을 불러오는 파이어베이스 간에 연관성을 만들어야 함.
-  - themoviedb에서는 id값을 기반으로 영화 detail을 불러옴. 그러므로 댓글의 경우, id를 기반으로 detail에 관련된 별도의 데이터베이스를 만들어야 함.
-  - detail에 접속할 경우, 영화 id를 고유키값으로 이용하여 addDoc을 실행하며, 댓글 리스트를 가져오게 해야함.
-  - 접속할 때마다 addDoc으로 모든 값을 초기화할 경우 의미없는 트랜잭션이 발생할 수 있으므로 추가적인 코드를 작성해야 함.
-  - 파이어베이스 detail에 관련된 필드(필수 요소) : id, 영화제목, 영화이미지, 추천수, 댓글, 댓글수, 최신 댓글 업데이트일
-### 댓글기능
-- 익명으로 입력 가능. 닉네임과 비밀번호 설정
-- 삭제버튼, 입력버튼, 글자수 제한(300글자).
-- 삭제버튼 클릭 시 비밀번호 입력에 관련된 팝업창 나옴. 관련된 결과는 토스트메시지로 확인가능.
+
+- 사용자와 상호작용이 있었던 영화 데이터를 동적으로 사용할 수 있도록 설계했습니다.
+  - 외부 영화 API를 통해 얻은 데이터를 사용자에게 제공합니다.
+  - 사용자가 특정 영화에 상호작용(클릭, 댓글 등)을 할 경우, 파이어스토어 DB에 실시간으로 반영됩니다.
+
+### 외부 영화 API
+
+- axios 라이브러리 사용
+  - axios의 인스턴스, interceptors를 이용해 프론트단에서 에러 유무를 파악할 수 있도록 설계했습니다.
+  - parser 함수를 통해 외부로부터 받은 데이터를 화면과 분리했습니다. API의 DTO 명세가 변경되더라도, parser 함수만 변경하면 앱이 정상적으로 동작하도록 구현했습니다.
+
+### 파이어스토어 DB
+
+- 파이어스토어의 NoSQL DB를 이용했습니다.
+- 사용자가 특정 영화에 상호작용을 한다면 해당 영화가 collection에 document로 등록됩니다.
+- 특정 영화에 댓글을 달면, 특정 영화 내부에 collection이 새로 형성되고, 내부에 댓글이 document로 등록됩니다.
+- 사용자 편의를 위해 댓글 수, 댓글 업데이트일을 실시간으로 반영합니다.
+
+### 폴더 구조
+
+```
+momovivie
+├─ apis
+│  ├─ getMovieDetail.ts
+│  └─ getMovieList.ts
+├─ components
+│  ├─ about
+│  │  └─ AboutMe.tsx
+│  ├─ commented
+│  │  ├─ CustomSelect.tsx
+│  │  └─ FilteredMovieList.tsx
+│  ├─ detail
+│  │  ├─ MovieDetail.tsx
+│  │  ├─ MovieDetailComment.tsx
+│  │  └─ MovieDetailCommentList.tsx
+│  ├─ Footer.tsx
+│  ├─ Layout.tsx
+│  ├─ main
+│  │  ├─ Carousel.tsx
+│  │  └─ CarouselSlice.tsx
+│  ├─ modal
+│  │  └─ CommentDeleteModal.tsx
+│  ├─ movies
+│  │  └─ Pagination.tsx
+│  ├─ Navbar.tsx
+│  ├─ Seo.tsx
+│  └─ share
+│     └─ Loading.tsx
+├─ context
+│  └─ FilteredMovieContext.tsx
+├─ db
+│  ├─ addMovieDetail.ts
+│  ├─ getCommentList.ts
+│  ├─ getFilteredMovieList.ts
+│  ├─ getMovieCollectionList.ts
+│  └─ useMovieDetailComment.ts
+├─ firebase
+│  └─ config.ts
+├─ hooks
+│  ├─ useGetRandomMovieList.ts
+│  ├─ useMoveToDetail.ts
+│  ├─ useTypingAnimation.ts
+│  └─ useValidation.ts
+├─ pages
+│  ├─ 404.tsx
+│  ├─ about.tsx
+│  ├─ commented.tsx
+│  ├─ index.tsx
+│  ├─ movies
+│  │  ├─ detail
+│  │  │  └─ [id].tsx
+│  │  └─ [page].tsx
+│  ├─ _app.tsx
+│  └─ _document.tsx
+├─ public
+├─ README.md
+├─ styles
+│  └─ globals.css
+├─ types
+│  ├─ comment.ts
+│  ├─ common.ts
+│  └─ movies.ts
+└─ utils
+   ├─ convertTimestamp.ts
+   ├─ getLocalStorageName.ts
+   ├─ getRandomMovieList.ts
+   └─ setPagination.ts
+```
+
+## 느낀점
+
+- **UI 설계를 체계적으로 해야함을 느꼈습니다.**
+  - 이 프로젝트는 페이지에 UI를 채운다는 방식으로 UI 설계없이 진행했습니다.
+  - 즉, 완성의 초점은 페이지에 맞추어져 있었기 때문에, UI 컴포넌트들의 심미적인 요소가 상대적으로 떨어졌던 것 같습니다.
+  - 다음에 개발할 프로젝트는 어느 정도의 Bottom-Up 방식을 도입해서 빈 도화지에 컴포넌트를 하나씩 조립하는 식으로 설계해도 좋겠다고 생각했습니다.
+- **개발을 잘하기 위해서는 이론 공부가 상당히 중요하다는 것을 다시 깨달았습니다.**
+  - 사람은 자기가 아는 범위 내에서만 사고할 수 있다는 것을 다시금 느꼈습니다.
+  - 리액트 공식문서를 훑어보기 전과 훑어보고 난 후의 개발 속도와 느껴지는 재미는 확연히 달랐기 때문입니다.
+  - 여유 시간이 있을 때마다 공식문서를 꾸준히 봐야겠다고 생각하게 되었습니다.
