@@ -46,6 +46,7 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
       commentInfo.password,
       commentInfo.comment
     );
+
     if (isValidInfo) {
       addComment({ ...commentInfo });
     }
@@ -87,6 +88,7 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
             type="text"
             placeholder="닉네임"
             required
+            minLength={2}
             maxLength={10}
             value={commentInfo.nickname}
             onChange={handleData}
@@ -97,6 +99,7 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
             type="password"
             placeholder="비밀번호"
             required
+            minLength={4}
             value={commentInfo.password}
             onChange={handleData}
           />
@@ -109,7 +112,6 @@ export default function MovieDetailComments({ movieId }: { movieId: number }) {
               id="comment"
               name="comment"
               placeholder="내용을 입력하세요."
-              minLength={10}
               maxLength={200}
               value={commentInfo.comment}
               onChange={handleData}
