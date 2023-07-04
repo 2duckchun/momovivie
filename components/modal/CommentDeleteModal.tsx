@@ -59,8 +59,6 @@ export default function CommentDeleteModal({
               취소
             </button>
           </div>
-          <div>id : {commentId}</div>
-          <div>pass : {commentPassword}</div>
         </div>
       </div>
       <style jsx>{`
