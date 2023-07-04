@@ -1,6 +1,5 @@
 import { MOVIE_API_URL } from "@/types/movies";
 import Image from "next/image";
-import { useCallback, useState } from "react";
 
 export default function CarouselSlide({ movie, onClickCard }: any) {
   return (

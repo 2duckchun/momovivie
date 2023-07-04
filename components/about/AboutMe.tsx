@@ -1,7 +1,7 @@
 import Image from "next/image";
-import githubLogo from "../public/github-logo.png";
-import blogLogo from "../public/blog.png";
-import gmailLogo from "../public/gmail.png";
+import githubLogo from "../../public/github-logo.png";
+import blogLogo from "../../public/blog.png";
+import gmailLogo from "../../public/gmail.png";
 import Link from "next/link";
 
 export default function AboutMe() {
