@@ -1,4 +1,4 @@
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/movies/Pagination";
 import Seo from "@/components/Seo";
 import { GetMovieListResult, MOVIE_API_URL } from "@/types/movies";
 import type { MovieIndex } from "@/types/movies";
@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import getMovieList from "@/apis/getMovieList";
 import Loading from "@/components/share/Loading";
 import useMoveToDetail from "@/hooks/useMoveToDetail";
+import Image from "next/image";
 
 export default function Home({ movieList, isSuccess }: GetMovieListResult) {
   const router = useRouter();
@@ -21,7 +22,16 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
               key={movie.id}
               onClick={() => moveToDetail(movie.id)}
             >
-              <img src={`${MOVIE_API_URL.IMG}${movie.poster_path}`} />
+              <Image
+                src={`${MOVIE_API_URL.IMG}${movie.poster_path}`}
+                alt={`${movie.title} 영화 포스터`}
+                width={170}
+                height={250}
+                priority={true}
+                placeholder="blur"
+                blurDataURL="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
+              />
+              {/* <img src={`${MOVIE_API_URL.IMG}${movie.poster_path}`} /> */}
               <h4>{movie.title}</h4>
               <div className="movie_info">
                 <span>평점:{movie.vote_average}</span>
@@ -37,13 +47,18 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
       <Pagination index={router.query.page} />
       <style jsx>{`
         .container {
+          padding: 5px;
+          margin-top: 20px;
           position: relative;
           display: grid;
           grid-template-columns: 1fr 1fr;
-          padding: 20px;
-          gap: 25px;
+          gap: 10px;
         }
         .movie {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
           cursor: pointer;
         }
         .movie img {
@@ -69,7 +84,7 @@ export default function Home({ movieList, isSuccess }: GetMovieListResult) {
           justify-content: center;
           align-items: center;
           min-height: 45px;
-          font-size: 18px;
+          font-size: 1.1rem;
           text-align: center;
         }
         .page {
