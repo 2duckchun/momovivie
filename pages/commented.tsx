@@ -1,5 +1,5 @@
 import Seo from "@/components/Seo";
-import CustomSelect from "@/components/share/CustomSelect";
+import CustomSelect from "@/components/commented/CustomSelect";
 import { filterOptions } from "@/db/getFilteredMovieList";
 import {
   useCommentedContextState,

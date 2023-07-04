@@ -1,4 +1,4 @@
-import AboutMe from "@/components/AboutMe";
+import AboutMe from "@/components/about/AboutMe";
 import Seo from "@/components/Seo";
 import useTypingAnimation from "@/hooks/useTypingAnimation";
 
