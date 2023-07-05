@@ -1,7 +1,4 @@
-import {
-  useCommentedDispatchContext,
-  useCommentedContextState,
-} from "@/context/FilteredMovieContext";
+import { useCommentedDispatchContext } from "@/context/FilteredMovieContext";
 import {
   FITERED_MOVIE_ACTION,
   MOVIE_API_URL,

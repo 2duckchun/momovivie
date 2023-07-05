@@ -6,7 +6,6 @@ import {
   deleteDoc,
   doc,
   increment,
-  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { useReducer } from "react";
